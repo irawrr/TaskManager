@@ -28,3 +28,12 @@ def create(request):
         'error': error
     }
     return render(request, 'main/create.html', context)
+
+
+def delete(request, pk):
+    try:
+        obj = Task.objects.get(pk=pk)
+        obj.delete()
+        return redirect('home')
+    except Task.DoesNotExist:
+        return redirect('home')
