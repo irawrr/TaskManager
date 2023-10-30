@@ -11,6 +11,8 @@
             <div class="alert alert-warning mt-2">
                 <h3>{{ el.title }}</h3>
                 <p>{{ el.task }}</p>
+                <p>Время на выполнение: {{ el.time }}</p>
+                 <a href="{% url 'delete' pk=el.id %}" class="btn btn-outline-danger">Удалить</a>
             </div>
         {% endfor %}
     {% else %}

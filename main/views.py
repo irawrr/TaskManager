@@ -21,10 +21,18 @@ def create(request):
             return redirect('home')
         else:
             error = 'Форма была неверной'
-
     form = TaskForm()
     context = {
         'form': form,
         'error': error
     }
     return render(request, 'main/create.html', context)
+
+
+def delete(request, pk):
+    try:
+        obj = Task.objects.get(pk=pk)
+        obj.delete()
+        return redirect('home')
+    except Task.DoesNotExist:
+        return redirect('home')
