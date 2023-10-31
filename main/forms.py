@@ -17,7 +17,7 @@ class TaskForm(ModelForm):
             }),
             "time": TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Время на выполнение (HH:MM)'
+                'placeholder': 'Введите плановое время выполнения'
             }),
-
         }
+
