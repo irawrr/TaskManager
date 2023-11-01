@@ -5,17 +5,32 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Главная страница</h1>
+    <h1 style="text-align: center">Текущие задачи</h1>
+    <br>
+    <div class="container">
     {% if tasks %}
+        <table class="table table-bordered" id="table" style="text-align: center">
+        <thead class="table-dark">
+            <tr>
+                <th>№</th>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Время выполнения</th>
+                <th></th>
+            </tr>
+        </thead>
         {% for el in tasks %}
-            <div class="alert alert-warning mt-2">
-                <h3>{{ el.title }}</h3>
-                <p>{{ el.task }}</p>
-                <p>Время на выполнение: {{ el.time }}</p>
-                 <a href="{% url 'delete' pk=el.id %}" class="btn btn-outline-danger">Удалить</a>
-            </div>
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ el.title }}</td>
+                <td>{{ el.task }}</td>
+                <td>{{ el.time }}</td>
+                <td><a href="{% url 'delete' pk=el.id %}" class="btn btn-outline-danger">Удалить</a></td>
+            </tr>
         {% endfor %}
+        </table>
     {% else %}
-        <p>У вас нет записей!</p>
+        <p>У вас нет запланированных задач!</p>
     {% endif %}
+    </div>
 {% endblock %}
