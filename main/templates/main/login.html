@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="text-center">
+     <h1>Войти в аккаунт</h1>
+</div>
+<section class="w-100 p-4 d-flex justify-content-center pb-4">
+      <div style="width: 26rem;">
+        <div class="tab-content">
+          <div class="tab-pane fade active show" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+            <form>
+              <div class="form-outline mb-4">
+                <input type="email" id="loginName" class="form-control">
+                <label class="form-label" for="loginName" style="margin-left: 0px;">Логин</label>
+              <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 114.4px;"></div><div class="form-notch-trailing"></div></div></div>
+
+              <!-- Password input -->
+              <div class="form-outline mb-4">
+                <input type="password" id="loginPassword" class="form-control">
+                <label class="form-label" for="loginPassword" style="margin-left: 0px;">Пароль</label>
+              <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 64.8px;"></div><div class="form-notch-trailing"></div></div></div>
+
+              <button type="submit" class="btn btn-primary btn-block mb-3">Войти</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+{% endblock %}

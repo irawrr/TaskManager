@@ -3,13 +3,34 @@ from .models import Task
 from .forms import TaskForm
 
 
+def change(request):
+    tasks = Task.objects.order_by('-id')
+    return render(request, 'main/change.html', {'title': 'Текущие задачи', 'tasks': tasks})
+
+
+def report(request):
+    tasks = Task.objects.order_by('-id')
+    return render(request, 'main/report.html', {'title': 'Текущие задачи', 'tasks': tasks})
+
+
+def login(request):
+    tasks = Task.objects.order_by('-id')
+    return render(request, 'main/login.html', {'title': 'Текущие задачи', 'tasks': tasks})
+
+
+def users(request):
+    tasks = Task.objects.order_by('-id')
+    return render(request, 'main/users.html', {'title': 'Пользователи', 'tasks': tasks})
+
+
 def index(request):
     tasks = Task.objects.order_by('-id')
-    return render(request, 'main/index.html', {'title': 'Главная страница сайта', 'tasks': tasks})
+    return render(request, 'main/index.html', {'title': 'Текущие задачи', 'tasks': tasks})
 
 
 def about(request):
-    return render(request, 'main/about.html')
+    tasks = Task.objects.order_by('-id')
+    return render(request, 'main/about.html', {'title': 'Завершенные задачи', 'tasks': tasks})
 
 
 def create(request):
