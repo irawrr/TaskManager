@@ -8,18 +8,18 @@
       <div style="width: 26rem;">
         <div class="tab-content">
           <div class="tab-pane fade active show" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
-            <form>
+            <form method="post">
+                {% csrf_token %}
               <div class="form-outline mb-4">
-                <input type="email" id="username" class="form-control" placeholder="Введите почту">
+                  <input type="text" name="username" id="id_username" class="form-control" placeholder="Введите имя пользователя">
               <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 114.4px;"></div><div class="form-notch-trailing"></div></div></div>
-
               <!-- Password input -->
               <div class="form-outline mb-4">
-                <input type="password" id="password" class="form-control" placeholder="Введите пароль">
+                  <input type="password" name="password" id="id_password" class="form-control" placeholder="Введите пароль">
               <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 64.8px;"></div><div class="form-notch-trailing"></div></div></div>
                 <div class="CenteredButton" style="text-align: center">
               <button type="submit" class="btn btn-primary btn-block mb-3">Войти</button>
-                    </div>
+                </div>
             </form>
           </div>
         </div>

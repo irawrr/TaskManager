@@ -55,7 +55,7 @@ ROOT_URLCONF = 'djangoProject1.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [BASE_DIR / 'main/templates']
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -123,3 +123,21 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = '/'
+
+LOGIN_URL = '/login/'
+
+AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+SESSION_SAVE_EVERY_REQUEST = True
+
+SESSION_COOKIE_AGE = 86400 # sec
+
+SESSION_COOKIE_DOMAIN = None
+
+SESSION_COOKIE_NAME = 'DSESSIONID'
+
+SESSION_COOKIE_SECURE = False

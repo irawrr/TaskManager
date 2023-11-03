@@ -15,7 +15,7 @@ def report(request):
 
 def login(request):
     tasks = Task.objects.order_by('-id')
-    return render(request, 'main/login.html', {'title': 'Текущие задачи', 'tasks': tasks})
+    return render(request, 'main/templates/registration/login.html', {'title': 'Текущие задачи', 'tasks': tasks})
 
 
 def users(request):
@@ -26,11 +26,6 @@ def users(request):
 def index(request):
     tasks = Task.objects.order_by('-id')
     return render(request, 'main/index.html', {'title': 'Текущие задачи', 'tasks': tasks})
-
-
-def about(request):
-    tasks = Task.objects.order_by('-id')
-    return render(request, 'main/about.html', {'title': 'Завершенные задачи', 'tasks': tasks})
 
 
 def create(request):
