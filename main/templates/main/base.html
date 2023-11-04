@@ -25,14 +25,14 @@
         <button type="button" class="btn btn-outline-primary me-2">
             <a href="{% url 'login' %}" class="nav-link px-2 link-blue" onclick="location.href='{% url 'logout' %}?next=main/templates/registration/login/'">Выход</a>
         </button>
-          {% else %}
-        <button type="button" class="btn btn-outline-primary me-2">
-            <a href="{% url 'login' %}" class="nav-link px-2 link-blue" onclick="location.href='{% url 'logout' %}?next=main/templates/registration/login/'">Вход</a>
-        </button>
-          {% endif %}
-        <button type="button" class="btn btn-primary">
+            <button type="button" class="btn btn-primary">
             <a href="{% url 'change' %}" class="nav-link px-2 link-blue">Сменить пароль</a>
         </button>
+          {% else %}
+        <button type="button" class="btn btn-outline-primary me-2">
+            <a href="{% url 'login' %}" class="nav-link px-2 link-blue" onclick="location.href='{% url 'login' %}?next=main/templates/registration/login/'">Вход</a>
+        </button>
+          {% endif %}
       </div>
     </header>
   </div>
