@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
@@ -15,23 +16,17 @@ class Task(models.Model):
         verbose_name_plural = 'Задачи'
 
 
-class Group(models.Model):
-    name = models.CharField(null=False, unique=True, max_length=255)
-
-
-class User(models.Model):
-    first_name = models.CharField(null=False, max_length=255)
-    last_name = models.CharField(null=False, max_length=255)
+class Info(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     sex = models.BooleanField(default=False)  # male = False, female = True
     birthday = models.DateField(null=True)
-    group = models.ForeignKey("Group", on_delete=models.SET_NULL, null=True)
 
 
 class Record(models.Model):
     date = models.DateField(null=False)
     name = models.CharField(null=False, max_length=255)
     description = models.TextField(null=True)
-    user = models.ForeignKey("User", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     planned_time = models.TimeField(null=False)
     actual_time = models.TimeField(null=True)
     reason = models.TextField(null=True)
@@ -42,7 +37,7 @@ class Record(models.Model):
 
 class Log(models.Model):
     record = models.ForeignKey("Record", on_delete=models.RESTRICT)
-    user = models.ForeignKey("User", on_delete=models.RESTRICT)
+    user = models.ForeignKey(User, on_delete=models.RESTRICT)
     created_at = models.DateTimeField(auto_now_add=True)
     old_data = models.JSONField()
     new_data = models.JSONField()
