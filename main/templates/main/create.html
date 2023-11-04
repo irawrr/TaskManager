@@ -5,13 +5,14 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Создать задачу</h1>
+    <h1 style="text-align: center">{{ title }}</h1><br>
     <form method="post">
         {% csrf_token %}
         {{ form.title }}<br>
         {{ form.task }}<br>
         {{ form.time }}<br>
-        <button type="submit" class="btn btn-success">Добавить</button>
-        <span> {{ error }}</span>
+        <button type="submit" class="btn btn-success">{{ button_name }}</button>
+        <a href="{% url 'home' %}" class="btn btn-danger">Отмена</a>
+        <span style="color: red"> {{ error }}</span>
     </form>
 {% endblock %}

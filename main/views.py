@@ -9,20 +9,24 @@ def change(request):
     tasks = Task.objects.order_by('-id')
     return render(request, 'main/change.html', {'title': 'Текущие задачи', 'tasks': tasks})
 
+
 @login_required
 def report(request):
     tasks = Task.objects.order_by('-id')
     return render(request, 'main/report.html', {'title': 'Текущие задачи', 'tasks': tasks})
+
 
 @login_required
 def users(request):
     tasks = Task.objects.order_by('-id')
     return render(request, 'main/users.html', {'title': 'Пользователи', 'tasks': tasks})
 
+
 @login_required
 def index(request):
     tasks = Task.objects.order_by('-id')
     return render(request, 'main/index.html', {'title': 'Текущие задачи', 'tasks': tasks})
+
 
 @login_required
 def create(request):
@@ -37,9 +41,12 @@ def create(request):
     form = TaskForm()
     context = {
         'form': form,
-        'error': error
+        'error': error,
+        'title': "Создание задачи",
+        'button_name': "Создать"
     }
     return render(request, 'main/create.html', context)
+
 
 @login_required
 def delete(request, pk):
@@ -49,3 +56,26 @@ def delete(request, pk):
         return redirect('home')
     except Task.DoesNotExist:
         return redirect('home')
+
+
+@login_required
+def edit(request, pk):
+    error = ''
+    task = Task.objects.get(pk=pk)
+    if request.method == "POST":
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.save()
+            return redirect('home')
+        else:
+            error = 'Форма была неверной!'
+    else:
+        form = TaskForm(instance=task)
+    context = {
+        'form': form,
+        'error': error,
+        'title': "Редактирование задачи",
+        'button_name': "Редактировать"
+    }
+    return render(request, 'main/create.html', context)
