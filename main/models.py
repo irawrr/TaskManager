@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.utils.translation import gettext_lazy as _
 
 
 class Task(models.Model):
@@ -17,8 +18,12 @@ class Task(models.Model):
 
 
 class Info(models.Model):
+    class Sex(models.TextChoices):
+        FEMALE = "F", _("Female")
+        MALE = "M", _("Male")
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    sex = models.BooleanField(default=False)  # male = False, female = True
+    sex = models.CharField(max_length=1, choices=Sex.choices, default=Sex.FEMALE)
     birthday = models.DateField(null=True)
 
 
