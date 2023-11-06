@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <h2 style="text-align: center">Текущие задачи</h2>
+    <h2 style="text-align: center">Запланированные задачи</h2>
     <br>
     <div class="container">
     <div class="form-check mb-0">
@@ -24,7 +24,11 @@
             </tr>
         </thead>
         {% for el in tasks %}
-            <tr>
+            <tr {% if el.is_completed %}
+                    class="table-success"
+            {% else %}
+                    class="table-danger"
+            {% endif %}>
                 <th scope="row">{{ forloop.counter }}</th>
                 <td>{{ el.name }}</td>
                 <td>{{ el.description }}</td>
@@ -39,7 +43,7 @@
                           <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                         </svg>
                     </a>
-                    <a href="{% url 'delete' pk=el.id %}" class="btn btn-outline-success">Завершить задачу</a>
+                    <a href="{% url 'delete' pk=el.id %}" class="btn btn-danger">Завершить задачу</a>
                 </td>
             </tr>
         {% endfor %}
