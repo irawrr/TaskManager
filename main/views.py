@@ -1,30 +1,30 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .models import Task
-from .forms import TaskForm
+from .models import Record
+from .forms import RecordForm
 
 
 @login_required
 def change(request):
-    tasks = Task.objects.order_by('-id')
+    tasks = Record.objects.order_by('-id')
     return render(request, 'main/change.html', {'title': 'Текущие задачи', 'tasks': tasks})
 
 
 @login_required
 def report(request):
-    tasks = Task.objects.order_by('-id')
+    tasks = Record.objects.order_by('-id')
     return render(request, 'main/report.html', {'title': 'Текущие задачи', 'tasks': tasks})
 
 
 @login_required
 def users(request):
-    tasks = Task.objects.order_by('-id')
+    tasks = Record.objects.order_by('-id')
     return render(request, 'main/users.html', {'title': 'Пользователи', 'tasks': tasks})
 
 
 @login_required
 def index(request):
-    tasks = Task.objects.order_by('-id')
+    tasks = Record.objects.order_by('-id')
     return render(request, 'main/index.html', {'title': 'Текущие задачи', 'tasks': tasks})
 
 
@@ -32,13 +32,16 @@ def index(request):
 def create(request):
     error = ''
     if request.method == 'POST':
-        form = TaskForm(request.POST)
+        form = RecordForm(request.POST)
         if form.is_valid():
+            record = form.save(commit=False)
+            record.user = request.user
+            record.save()
             form.save()
             return redirect('home')
         else:
-            error = 'Форма была неверной'
-    form = TaskForm()
+            error = 'Введите корректные данные!'
+    form = RecordForm()
     context = {
         'form': form,
         'error': error,
@@ -51,27 +54,27 @@ def create(request):
 @login_required
 def delete(request, pk):
     try:
-        obj = Task.objects.get(pk=pk)
+        obj = Record.objects.get(pk=pk)
         obj.delete()
         return redirect('home')
-    except Task.DoesNotExist:
+    except Record.DoesNotExist:
         return redirect('home')
 
 
 @login_required
 def edit(request, pk):
     error = ''
-    task = Task.objects.get(pk=pk)
+    task = Record.objects.get(pk=pk)
     if request.method == "POST":
-        form = TaskForm(request.POST, instance=task)
+        form = RecordForm(request.POST, instance=task)
         if form.is_valid():
             task = form.save(commit=False)
             task.save()
             return redirect('home')
         else:
-            error = 'Форма была неверной!'
+            error = 'Введите корректные данные!'
     else:
-        form = TaskForm(instance=task)
+        form = RecordForm(instance=task)
     context = {
         'form': form,
         'error': error,
