@@ -24,7 +24,7 @@ def users(request):
 
 @login_required
 def index(request):
-    tasks = Record.objects.order_by('-id')
+    tasks = Record.objects.order_by('-id').filter(user=request.user)
     return render(request, 'main/index.html', {'title': 'Текущие задачи', 'tasks': tasks})
 
 
