@@ -1,19 +1,19 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import Record
-from .forms import RecordForm
+from .forms import RecordForm, ResultForm
 
 
 @login_required
 def change(request):
     tasks = Record.objects.order_by('-id')
-    return render(request, 'main/change.html', {'title': 'Текущие задачи', 'tasks': tasks})
+    return render(request, 'main/change.html', {'title': 'Сменить пароль', 'tasks': tasks})
 
 
 @login_required
 def report(request):
     tasks = Record.objects.order_by('-id')
-    return render(request, 'main/report.html', {'title': 'Текущие задачи', 'tasks': tasks})
+    return render(request, 'main/report.html', {'title': 'Отчёт', 'tasks': tasks})
 
 
 @login_required
@@ -49,6 +49,29 @@ def create(request):
         'button_name': "Создать"
     }
     return render(request, 'main/create.html', context)
+
+
+@login_required
+def complete(request):
+    error = ''
+    if request.method == 'POST':
+        form = ResultForm(request.POST)
+        if form.is_valid():
+            record = form.save(commit=False)
+            record.user = request.user
+            record.save()
+            form.save()
+            return redirect('home')
+        else:
+            error = 'Введите корректные данные!'
+    form = ResultForm()
+    context = {
+        'form': form,
+        'error': error,
+        'title': "Завершение задачи",
+        'button_name': "Завершить"
+    }
+    return render(request, 'main/complete.html', context)
 
 
 @login_required

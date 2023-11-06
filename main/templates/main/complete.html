@@ -1,0 +1,18 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Завершить задачу
+{% endblock %}
+
+{% block content %}
+    <h2 style="text-align: center">{{ title }}</h2><br>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.actual_time }}<br>
+        {{ form.reason }}<br>
+        {{ form.progress }}<br>
+        <button type="submit" class="btn btn-success">{{ button_name }}</button>
+        <a href="{% url 'home' %}" class="btn btn-danger">Отмена</a>
+        <span style="color: black; margin-left: 30px"> {{ error }}</span>
+    </form>
+{% endblock %}

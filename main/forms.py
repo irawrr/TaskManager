@@ -25,3 +25,22 @@ class RecordForm(ModelForm):
             }),
         }
 
+
+class ResultForm(ModelForm):
+    class Meta:
+        model = Record
+        fields = ["actual_time", "reason", "progress"]
+        widgets = {
+            "actual_time": TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите фактическое время выполнения'
+            }),
+            "reason": Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите причины расхождений'
+            }),
+            "progress": TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите прогресс'
+            }),
+        }
