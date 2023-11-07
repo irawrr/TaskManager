@@ -52,29 +52,6 @@ def create(request):
 
 
 @login_required
-def complete(request):
-    error = ''
-    if request.method == 'POST':
-        form = ResultForm(request.POST)
-        if form.is_valid():
-            record = form.save(commit=False)
-            record.user = request.user
-            record.save()
-            form.save()
-            return redirect('home')
-        else:
-            error = 'Введите корректные данные!'
-    form = ResultForm()
-    context = {
-        'form': form,
-        'error': error,
-        'title': "Завершение задачи",
-        'button_name': "Завершить"
-    }
-    return render(request, 'main/complete.html', context)
-
-
-@login_required
 def delete(request, pk):
     try:
         obj = Record.objects.get(pk=pk)
@@ -105,3 +82,26 @@ def edit(request, pk):
         'button_name': "Редактировать"
     }
     return render(request, 'main/create.html', context)
+
+@login_required
+def complete(request, pk):
+    error = ''
+    task = Record.objects.get(pk=pk)
+    if request.method == "POST":
+        form = ResultForm(request.POST, instance=task)
+        if form.is_valid():
+            task.is_completed = True
+            task = form.save(commit=False)
+            task.save()
+            return redirect('home')
+        else:
+            error = 'Введите корректные данные!'
+    else:
+        form = ResultForm(instance=task)
+    context = {
+        'form': form,
+        'error': error,
+        'title': "Завершение задачи",
+        'button_name': "Завершить"
+    }
+    return render(request, 'main/complete.html', context)
