@@ -10,15 +10,12 @@
           <div class="tab-pane fade active show" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
             <form method="post">
                 {% csrf_token %}
-              <div class="form-outline mb-4">
-                  <input type="password" name="password" id="id_password" class="form-control" placeholder="Введите текущий пароль">
-              <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 64.8px;"></div><div class="form-notch-trailing"></div></div></div>
               <!-- Password input -->
               <div class="form-outline mb-4">
                   <input type="password" name="password" id="id_password" class="form-control" placeholder="Введите новый пароль">
               <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 64.8px;"></div><div class="form-notch-trailing"></div></div></div>
               <div class="form-outline mb-4">
-                  <input type="password" name="password" id="id_password" class="form-control" placeholder="Подтвердить новый пароль">
+                  <input type="password" name="password2" id="id_password" class="form-control" placeholder="Подтвердить новый пароль">
               <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 64.8px;"></div><div class="form-notch-trailing"></div></div></div>
                 <div class="CenteredButton" style="text-align: center">
               <button type="submit" class="btn btn-success btn-block mb-3">Сохранить</button>
