@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .models import Record
+from .models import Record, User
 from .forms import RecordForm, ResultForm
 from datetime import *
 
@@ -13,7 +13,6 @@ def change(request):
 
 @login_required
 def report(request):
-    # tasks = Record.objects.order_by('-id')
     data = request.GET
     today = date.today()
     min_year = 2020
@@ -27,9 +26,49 @@ def report(request):
         year = today.year
     week_start = date.fromisocalendar(year, week_num, 1)
     week_end = week_start + timedelta(days=6)
+    tasks = Record.objects.filter(date__gte=week_start).filter(date__lte=week_end).order_by('id')
+    users = User.objects.order_by('id')
     return render(request, 'main/report.html', {
         'title': 'Отчёт',
-        # 'tasks': tasks,
+        'days': [
+            'monday',
+            'tuesday',
+            'wednesday',
+            'thursday',
+            'friday',
+            'saturday',
+            'sunday',
+        ],
+        'data': {
+            'monday': {
+                'date': week_start,
+                'tasks': list(tasks.filter(date__iso_week_day=1).all()),
+            },
+            'tuesday': {
+                'date': week_start + timedelta(days=1),
+                'tasks': list(tasks.filter(date__iso_week_day=2).all()),
+            },
+            'wednesday': {
+                'date': week_start + timedelta(days=2),
+                'tasks': list(tasks.filter(date__iso_week_day=3).all()),
+            },
+            'thursday': {
+                'date': week_start + timedelta(days=3),
+                'tasks': list(tasks.filter(date__iso_week_day=4).all()),
+            },
+            'friday': {
+                'date': week_start + timedelta(days=4),
+                'tasks': list(tasks.filter(date__iso_week_day=5).all()),
+            },
+            'saturday': {
+                'date': week_start + timedelta(days=5),
+                'tasks': list(tasks.filter(date__iso_week_day=6).all()),
+            },
+            'sunday': {
+                'date': week_end,
+                'tasks': list(tasks.filter(date__week_day=7).all()),
+            },
+        },
         'week': {
             'number': week_num,
             'start': week_start,
@@ -45,7 +84,7 @@ def report(request):
                 ),
             },
         },
-        'year': year,
+        'users': list(users.all()),
     })
 
 

@@ -19,5 +19,27 @@
             </li>
         </ul>
     </nav>
+    <table class="table table-striped-columns">
+        <tr>
+            <th></th>
+            {% for user in users %}
+                <th class="text-center">{{ user.first_name }} {{ user.last_name }}</th>
+            {% endfor %}
+        </tr>
+        {% for day in days %}
+            <tr>
+                <th>{{ data|lookup:day|lookup:'date'|date:"d.m" }}</th>
+                {% for user in users %}
+                    <td>
+                        {% for task in data|lookup:day|lookup:'tasks' %}
+                            {% if task.user == user %}
+                                {{ task.name }} [{{ task.actual_time }} / {{ task.planned_time }}]<br>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
 
 {% endblock %}
