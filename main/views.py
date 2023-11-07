@@ -6,6 +6,14 @@ from .forms import RecordForm, ResultForm
 
 @login_required
 def change(request):
+    if request.method == "POST":
+        data = request.POST
+        password = data.get("password")
+        password2 = data.get("password2")
+        if password == password2:
+            user = request.user
+            user.set_password(password)
+            user.save()
     tasks = Record.objects.order_by('-id')
     return render(request, 'main/change.html', {'title': 'Сменить пароль', 'tasks': tasks})
 
