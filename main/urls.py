@@ -10,5 +10,4 @@ urlpatterns = [
     path('change', views.change, name='change'),
     path('complete/<int:pk>', views.complete, name='complete'),
     path('edit/<int:pk>', views.edit, name='edit')
-
 ]

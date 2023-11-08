@@ -9,6 +9,17 @@
     <br>
     <div class="container">
     <div class="form-check mb-0">
+        <div class="col-md-6">
+        <div class="form-group">
+         <select id="question-subject" class="form-control-sm custom-select" name="selector">
+            <option selected disabled>Выберите дату</option>
+            {% for task_ in tasks%}
+             <option value="{{task_}}">{{task_}}</option>
+             {% endfor %}
+            </select>
+             </div>
+        </div>
+        <br>
     {% if tasks %}
         <table class="table table-bordered" id="table" style="text-align: center">
         <thead class="table-dark">
@@ -58,3 +69,22 @@
     </div>
     </div>
 {% endblock %}
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<script>
+    $("#question-subject").change(function () {
+        const date = $(this).val();
+        $.ajax({
+            type: 'post',
+            url: '{% url 'home' %}',
+            data: {
+                'date': date,
+                'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success:function(response){
+                $("html").html(response);
+            }
+        });
+    });
+</script>
+{% endblock javascript %}

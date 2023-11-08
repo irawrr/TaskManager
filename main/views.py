@@ -1,4 +1,9 @@
+import datetime
+
 from django.contrib.auth.decorators import login_required
+from django.db.models import TextField
+from django.db.models.functions import Cast
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from .models import Record
 from .forms import RecordForm, ResultForm
@@ -32,9 +37,8 @@ def users(request):
 
 @login_required
 def index(request):
-    tasks = Record.objects.order_by('-id').filter(user=request.user)
-    return render(request, 'main/index.html', {'title': 'Текущие задачи', 'tasks': tasks})
-
+    tasks = Record.objects.order_by('date').filter(user=request.user)
+    return render(request, 'main/index.html', {'title': 'Текущие задачи', 'tasks': tasks })
 
 @login_required
 def create(request):
