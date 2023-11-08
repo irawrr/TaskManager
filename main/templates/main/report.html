@@ -1,1 +1,45 @@
 {% extends 'main/base.html' %}
+{% load filters %}
+
+{% block content %}
+    <nav>
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="{{ week.urls.prev }}" aria-label="Предыдущая неделя">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link active" href="#">{{ week.start|date:"d.m.Y" }} - {{ week.end|date:"d.m.Y" }}</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="{{ week.urls.next }}" aria-label="Следующая неделя">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <table class="table table-striped-columns">
+        <tr>
+            <th></th>
+            {% for user in users %}
+                <th class="text-center">{{ user.first_name }} {{ user.last_name }}</th>
+            {% endfor %}
+        </tr>
+        {% for day in days %}
+            <tr>
+                <th>{{ data|lookup:day|lookup:'date'|date:"d.m" }}</th>
+                {% for user in users %}
+                    <td>
+                        {% for task in data|lookup:day|lookup:'tasks' %}
+                            {% if task.user == user %}
+                                {{ task.name }} [{{ task.actual_time }} / {{ task.planned_time }}]<br>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
