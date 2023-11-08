@@ -1,5 +1,15 @@
+from django import forms
+
 from .models import Record
 from django.forms import ModelForm, TextInput, Textarea
+
+
+class DateInput(forms.DateInput):
+    input_type = "date"
+
+
+class TimeInput(forms.DateInput):
+    input_type = "time"
 
 
 class RecordForm(ModelForm):
@@ -7,7 +17,7 @@ class RecordForm(ModelForm):
         model = Record
         fields = ["date", "name", "description", "planned_time"]
         widgets = {
-            "date": TextInput(attrs={
+            "date": DateInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Введите дату'
             }),
@@ -19,7 +29,7 @@ class RecordForm(ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Введите описание'
             }),
-            "planned_time": TextInput(attrs={
+            "planned_time": TimeInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Введите плановое время выполнения'
             }),
@@ -31,7 +41,7 @@ class ResultForm(ModelForm):
         model = Record
         fields = ["actual_time", "reason", "progress"]
         widgets = {
-            "actual_time": TextInput(attrs={
+            "actual_time": TimeInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Введите фактическое время выполнения'
             }),
@@ -44,3 +54,4 @@ class ResultForm(ModelForm):
                 'placeholder': 'Введите прогресс'
             }),
         }
+
