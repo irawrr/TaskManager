@@ -1,3 +1,4 @@
+from datetime import date
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -36,6 +37,14 @@ class Record(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def is_past_due(self):
+        return date.today() <= self.date
+
+    @property
+    def is_today(self):
+        return date.today() == self.date
 
     class Meta:
         verbose_name = 'Задача'

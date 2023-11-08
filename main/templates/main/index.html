@@ -6,85 +6,70 @@
 
 {% block content %}
     <h2 style="text-align: center">Запланированные задачи</h2>
-    <br>
     <div class="container">
     <div class="form-check mb-0">
-        <div class="col-md-6">
-        <div class="form-group">
-         <select id="question-subject" class="form-control-sm custom-select" name="selector">
-            <option selected disabled>Выберите дату</option>
-            {% for task_ in tasks%}
-             <option value="{{task_}}">{{task_}}</option>
-             {% endfor %}
-            </select>
-             </div>
-        </div>
-        <br>
     {% if tasks %}
+    {% for date in dates %}
         <table class="table table-bordered" id="table" style="text-align: center">
-        <thead class="table-dark">
+        <br>
+        <h4 style="text-align: center">— {{ date }} —</h4>
+        <thead class="table-primary">
             <tr>
-                <th scope="col" class="align-middle">№</th>
                 <th scope="col" class="align-middle">Название</th>
                 <th scope="col" class="align-middle">Описание</th>
-                <th scope="col" class="align-middle">Плановое время выполнения</th>
-                <th scope="col" class="align-middle">Фактическое время выполнения</th>
+                <th scope="col" class="align-middle">Плановое время <br>выполнения</th>
+                <th scope="col" class="align-middle">Фактическое время <br>выполнения</th>
                 <th scope="col" class="align-middle">Причины расхождений</th>
                 <th scope="col" class="align-middle">Прогресс</th>
                 <th></th>
             </tr>
         </thead>
         {% for el in tasks %}
+            {% if el.is_past_due and el.date == date %}
             <tr {% if el.is_completed %}
                     class="table-success"
+            {% elif not el.is_today %}
+                    class="table-warning"
             {% else %}
                     class="table-danger"
             {% endif %}>
-                <th scope="row">{{ forloop.counter }}</th>
                 <td>{{ el.name }}</td>
                 <td>{{ el.description }}</td>
                 <td>{{ el.planned_time }}</td>
                 <td>{{ el.actual_time }}</td>
                 <td>{{ el.reason }}</td>
                 <td>{{ el.progress }}</td>
-                <td> {% if not el.is_completed %}
+                <td> {% if not el.is_completed and el.is_today %}
+                    <a href="{% url 'edit' pk=el.id %}" class="btn btn-class-outline-info" style="margin-bottom: 5px; margin-top: -6px">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                          <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                          <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                        </svg>
+                    </a><br>
+                    <a href="{% url 'complete' pk=el.id %}" class="btn btn-danger">Завершить задачу</a>
+                    {% elif not el.is_today %}
                     <a href="{% url 'edit' pk=el.id %}" class="btn btn-class-outline-info" style="margin-bottom: 5px; margin-top: -6px">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                           <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                           <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                         </svg>
                     </a>
-                    <a href="{% url 'complete' pk=el.id %}" class="btn btn-danger">Завершить задачу</a>
                     {% else %}
                     Завершено
                     {% endif %}
                 </td>
             </tr>
+            {% endif %}
+        {% endfor %}
         {% endfor %}
         </table>
     {% else %}
         <p>У вас нет запланированных задач!</p>
     {% endif %}
-        <a class="btn btn-outline-secondary" href="{% url 'create' %}">Создать задачу</a>
+     <div class="col text-center">
+        <a class="btn btn-outline-dark" style="text-align: center" href="{% url 'create' %}">Создать задачу</a>
+     </div><br><br>
     </div>
     </div>
 {% endblock %}
-{% block javascript %}
-<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-<script>
-    $("#question-subject").change(function () {
-        const date = $(this).val();
-        $.ajax({
-            type: 'post',
-            url: '{% url 'home' %}',
-            data: {
-                'date': date,
-                'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
-            },
-            success:function(response){
-                $("html").html(response);
-            }
-        });
-    });
-</script>
-{% endblock javascript %}
+<script></script>

@@ -1,9 +1,4 @@
-import datetime
-
 from django.contrib.auth.decorators import login_required
-from django.db.models import TextField
-from django.db.models.functions import Cast
-from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from .models import Record, User
 from .forms import RecordForm, ResultForm
@@ -110,14 +105,15 @@ def users(request):
 @login_required
 def index(request):
     tasks = Record.objects.order_by('date').filter(user=request.user)
-    return render(request, 'main/index.html', {'title': 'Текущие задачи', 'tasks': tasks })
+    dates = Record.objects.values_list('date', flat=True).distinct().order_by('date')
+    return render(request, 'main/index.html', {'title': 'Текущие задачи', 'tasks': tasks, 'dates': dates})
 
 @login_required
 def create(request):
     error = ''
     if request.method == 'POST':
         form = RecordForm(request.POST)
-        if form.is_valid():
+        if form.is_valid() and form.cleaned_data['date'] >= datetime.now().date():
             record = form.save(commit=False)
             record.user = request.user
             record.save()
@@ -151,7 +147,7 @@ def edit(request, pk):
     task = Record.objects.get(pk=pk)
     if request.method == "POST":
         form = RecordForm(request.POST, instance=task)
-        if form.is_valid():
+        if form.is_valid() and form.cleaned_data['date'] >= datetime.now().date():
             task = form.save(commit=False)
             task.save()
             return redirect('home')
