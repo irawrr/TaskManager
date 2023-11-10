@@ -106,7 +106,18 @@ def users(request):
 def index(request):
     tasks = Record.objects.order_by('date').filter(user=request.user)
     dates = Record.objects.values_list('date', flat=True).distinct().order_by('date').filter(date__gte=date.today())
-    return render(request, 'main/index.html', {'title': 'Текущие задачи', 'tasks': tasks, 'dates': dates})
+    try:
+        date_string = request.GET.get('date')
+        selected_date = datetime.strptime(date_string, '%Y-%m-%d').date()
+        tasks = tasks.filter(date=selected_date)
+    except:
+        selected_date = None
+    return render(request, 'main/index.html', {
+        'title': 'Текущие задачи',
+        'tasks': tasks,
+        'dates': dates,
+        'selected_date': selected_date,
+    })
 
 @login_required
 def create(request):
