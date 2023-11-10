@@ -9,10 +9,19 @@
     <div class="container">
     <div class="form-check mb-0">
     {% if tasks %}
-    {% for date in dates %}
+    {% csrf_token %}
+        <div class="col-md-6">
+            <div class="form-group">
+                <select id="date-subject" class="form-control-sm custom-select">
+                    <option selected disabled>Выберите дату</option>
+                    {% for date in dates%}
+                        <option value="{{date}}">{{date}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
         <table class="table table-bordered" id="table" style="text-align: center">
         <br>
-        <h4 style="text-align: center">— {{ date }} —</h4>
         <thead class="table-primary">
             <tr>
                 <th scope="col" class="align-middle">Название</th>
@@ -25,7 +34,7 @@
             </tr>
         </thead>
         {% for el in tasks %}
-            {% if el.is_past_due and el.date == date %}
+            {% if el.is_past_due %}
             <tr {% if el.is_completed %}
                     class="table-success"
             {% elif not el.is_today %}
@@ -63,7 +72,6 @@
             </tr>
             {% endif %}
         {% endfor %}
-        {% endfor %}
         </table>
     {% else %}
         <p>У вас нет запланированных задач!</p>
@@ -74,4 +82,23 @@
     </div>
     </div>
 {% endblock %}
-<script></script>
+{% block javascript %}
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<script>
+    $("#question-subject").change(function () {
+        const date = $(this).val();  // get the selected subject ID from the HTML dropdown list
+        $.ajax({                       // initialize an AJAX request
+            type: "POST",
+            url: '{% url "date_selector" %}',
+            data: {
+                'subject_id': date,       // add the country id to the POST parameters
+                'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {   // `data` is from `get_topics_ajax` view function
+                //тут должно быть нечто
+                $("#question-topic").html(data); // replace the contents of the topic input with the data that came from the server
+            }
+        });
+    });
+</script>
+{% endblock javascript %}
