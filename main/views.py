@@ -185,3 +185,7 @@ def complete(request, pk):
         'button_name': "Завершить"
     }
     return render(request, 'main/complete.html', context)
+
+@login_required
+def select_date():
+    pass
