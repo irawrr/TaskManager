@@ -105,7 +105,7 @@ def users(request):
 @login_required
 def index(request):
     tasks = Record.objects.order_by('date').filter(user=request.user)
-    dates = Record.objects.values_list('date', flat=True).distinct().order_by('date')
+    dates = Record.objects.values_list('date', flat=True).distinct().order_by('date').filter(date__gte=date.today())
     return render(request, 'main/index.html', {'title': 'Текущие задачи', 'tasks': tasks, 'dates': dates})
 
 @login_required
