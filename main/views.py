@@ -66,7 +66,7 @@ def report(request):
             },
             'sunday': {
                 'date': week_end,
-                'tasks': list(tasks.filter(date__week_day=7).all()),
+                'tasks': list(tasks.filter(date__iso_week_day=7).all()),
             },
         },
         'week': {
