@@ -102,8 +102,8 @@ def report(request):
 
 @login_required
 def users(request):
-    tasks = Record.objects.order_by('-id')
-    return render(request, 'users/users.html', {'title': 'Пользователи', 'tasks': tasks})
+    users_ = User.objects.order_by('id')
+    return render(request, 'users/users.html', {'title': 'Пользователи', 'users': users_})
 
 
 @login_required
@@ -127,24 +127,24 @@ def add_user(request):
 
 
 @login_required
-def assign_task(request):
+def assign_task(request, pk):
     error = ''
     if request.method == 'POST':
         form = RecordForm(request.POST)
         if form.is_valid() and form.cleaned_data['date'] >= datetime.now().date():
             record = form.save(commit=False)
-            record.user = request.user
+            record.user = User.objects.get(pk=pk)
             record.save()
             form.save()
-            return redirect('assign_task')
+            return redirect('users')
         else:
             error = 'Введите корректные данные!'
     form = RecordForm()
     context = {
         'form': form,
         'error': error,
-        'title': " задачи",
-        'button_name': "Создать"
+        'title': "Назначение задачи",
+        'button_name': "Назначить",
     }
     return render(request, 'users/assign_task.html', context)
 
