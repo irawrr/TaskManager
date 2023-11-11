@@ -16,17 +16,17 @@
         <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
       </a>
       <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li><a href="{% url 'home' %}" class="nav-link px-2 link-dark">Задачи</a></li>
-        <li><a href="{% url 'users' %}" class="nav-link px-2 link-dark">Пользователи</a></li>
-        <li><a href="{% url 'report' %}" class="nav-link px-2 link-dark">Отчет</a></li>
+        <li><button onclick="window.location.href='{% url 'home' %}'" class="nav-link px-2 link-dark">Задачи</button></li>
+        <li><button onclick="window.location.href='{% url 'users' %}'" class="nav-link px-2 link-dark">Пользователи</button></li>
+        <li><button onclick="window.location.href='{% url 'report' %}'" class="nav-link px-2 link-dark">Отчет</button></li>
       </ul>
       <div class="col-md-3 text-end">
           {% if user.is_authenticated %}
         <button type="button" class="btn btn-outline-primary me-2">
-            <a class="nav-link px-2 link-blue" onclick="location.href='{% url 'logout' %}?next=/login/'">Выход</a>
+            <a class="nav-link px-2 link-blue" onclick="window.location.href='{% url 'logout' %}?next=/login/'">Выход</a>
         </button>
             <button type="button" class="btn btn-primary">
-            <a href="{% url 'change' %}" class="nav-link px-2 link-blue">Сменить пароль</a>
+            <a onclick="window.location.href='{% url 'change' %}'" class="nav-link px-2 link-blue">Сменить пароль</a>
         </button>
           {% endif %}
       </div>

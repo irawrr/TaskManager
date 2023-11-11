@@ -53,22 +53,22 @@
                 <td>{{ el.reason }}</td>
                 <td>{{ el.progress }}</td>
                 <td> {% if not el.is_completed and el.is_today %}
-                    <a href="{% url 'edit' pk=el.id %}" class="btn btn-class-outline-info" style="margin-bottom: 5px; margin-top: -6px">
+                    <button onclick="window.location.href='{% url 'edit' pk=el.id %}'" class="btn btn-class-outline-info shadow-none" style="margin-bottom: 5px; margin-top: -5px">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                           <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                           <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                         </svg>
-                    </a><br>
-                    <a href="{% url 'complete' pk=el.id %}" class="btn btn-danger">Завершить задачу</a>
+                    </button><br>
+                    <button onclick="window.location.href='{% url 'complete' pk=el.id %}'" class="btn btn-danger">Завершить задачу</button>
                     {% elif not el.is_today %}
-                    <a href="{% url 'edit' pk=el.id %}" class="btn btn-class-outline-info" style="margin-bottom: 5px; margin-top: -6px">
+                   <button onclick="window.location.href='{% url 'edit' pk=el.id %}'" class="btn btn-class-outline-info shadow-none" type="button" style="margin-bottom: 5px; margin-top: -5px">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                           <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                           <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                         </svg>
-                     </a>
+                     </button>
                     <br>
-                        <a href="{% url 'delete' pk=el.id %}" class="btn btn-danger">Удалить задачу</a>
+                        <button onclick="window.location.href='{% url 'delete' pk=el.id %}'" class="btn btn-danger">Удалить задачу</button>
                     {% else %}
                     Завершено
                     {% endif %}
@@ -81,7 +81,7 @@
         <p>У вас нет запланированных задач!</p>
     {% endif %}
      <div class="col text-center">
-        <a class="btn btn-outline-dark" style="text-align: center" href="{% url 'create' %}">Создать задачу</a>
+        <button class="btn btn-outline-dark" style="text-align: center" onclick="window.location.href='{% url 'create' %}'">Создать задачу</button>
      </div><br><br>
     </div>
     </div>
