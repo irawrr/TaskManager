@@ -33,7 +33,7 @@
                     <td class="border-start border-black">
                         {% for task in data|lookup:day|lookup:'tasks' %}
                             {% if task.user == user %}
-                                {{ task.name }} [{{ task.actual_time }} / {{ task.planned_time }}]<br>
+                                {{ task.name }} [<span title="Фактическое время">{{ task.actual_time }}</span> / <span title="Запланированное время">{{ task.planned_time }}</span>]<br>
                             {% endif %}
                         {% endfor %}
                     </td>
