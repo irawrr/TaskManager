@@ -1,7 +1,6 @@
 from django import forms
-
-from .models import Record
-from django.forms import ModelForm, TextInput, Textarea
+from .models import Record, User
+from django.forms import ModelForm, TextInput, Textarea, PasswordInput
 
 
 class DateInput(forms.DateInput):
@@ -10,6 +9,10 @@ class DateInput(forms.DateInput):
 
 class TimeInput(forms.DateInput):
     input_type = "time"
+
+
+class CheckBox(forms.CheckboxInput):
+    input_type = "checkbox"
 
 
 class RecordForm(ModelForm):
@@ -55,3 +58,33 @@ class ResultForm(ModelForm):
             }),
         }
 
+
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "email", "username", "password", "is_superuser"]
+        widgets = {
+            "first_name": TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите имя'
+            }),
+            "last_name": TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите фамилию'
+            }),
+            "email": TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите почту'
+            }),
+            "username": TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите логин'
+            }),
+            "password": PasswordInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите пароль'
+            }),
+            "is_superuser": CheckBox(attrs={
+                'class': 'required checkbox form-control',
+            }),
+        }

@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import Record, User
-from .forms import RecordForm, ResultForm
+from .forms import RecordForm, ResultForm, UserForm
 from datetime import *
 from django.contrib import messages
 
@@ -103,8 +103,50 @@ def report(request):
 @login_required
 def users(request):
     tasks = Record.objects.order_by('-id')
-    return render(request, 'main/users.html', {'title': 'Пользователи', 'tasks': tasks})
+    return render(request, 'users/users.html', {'title': 'Пользователи', 'tasks': tasks})
 
+
+@login_required
+def add_user(request):
+    error = ''
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        record = form.save(commit=False)
+        record.user = request.user
+        record.save()
+        form.save()
+        return redirect('users')
+    form = UserForm()
+    context = {
+        'form': form,
+        'error': error,
+        'title': "Создание пользователя",
+        'button_name': "Создать"
+    }
+    return render(request, 'users/add_user.html', context)
+
+
+@login_required
+def assign_task(request):
+    error = ''
+    if request.method == 'POST':
+        form = RecordForm(request.POST)
+        if form.is_valid() and form.cleaned_data['date'] >= datetime.now().date():
+            record = form.save(commit=False)
+            record.user = request.user
+            record.save()
+            form.save()
+            return redirect('assign_task')
+        else:
+            error = 'Введите корректные данные!'
+    form = RecordForm()
+    context = {
+        'form': form,
+        'error': error,
+        'title': " задачи",
+        'button_name': "Создать"
+    }
+    return render(request, 'users/assign_task.html', context)
 
 @login_required
 def index(request):

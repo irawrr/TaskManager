@@ -10,4 +10,6 @@ urlpatterns = [
     path('change', views.change, name='change'),
     path('complete/<int:pk>', views.complete, name='complete'),
     path('edit/<int:pk>', views.edit, name='edit'),
+    path('assign_task', views.assign_task, name='assign_task'),
+    path('add_user', views.add_user, name='add_user'),
 ]
