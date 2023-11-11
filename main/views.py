@@ -78,7 +78,7 @@ def report(request):
             },
             'sunday': {
                 'date': week_end,
-                'tasks': list(tasks.filter(date__week_day=7).all()),
+                'tasks': list(tasks.filter(date__iso_week_day=7).all()),
             },
         },
         'week': {
@@ -108,9 +108,20 @@ def users(request):
 
 @login_required
 def index(request):
-    tasks = Record.objects.order_by('date').filter(user=request.user)
+    tasks = Record.objects.order_by('date').filter(user=request.user, date__gte=date.today())
     dates = Record.objects.values_list('date', flat=True).distinct().order_by('date').filter(date__gte=date.today())
-    return render(request, 'main/index.html', {'title': 'Текущие задачи', 'tasks': tasks, 'dates': dates})
+    try:
+        date_string = request.GET.get('date')
+        selected_date = datetime.strptime(date_string, '%Y-%m-%d').date()
+        tasks = tasks.filter(date=selected_date)
+    except:
+        selected_date = None
+    return render(request, 'main/index.html', {
+        'title': 'Текущие задачи',
+        'tasks': tasks,
+        'dates': dates,
+        'selected_date': selected_date,
+    })
 
 @login_required
 def create(request):
