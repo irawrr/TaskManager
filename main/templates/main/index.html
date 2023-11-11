@@ -7,7 +7,6 @@
 {% block content %}
     <h2 style="text-align: center">Запланированные задачи</h2>
     <div class="container">
-    <div class="form-check mb-0">
     {% if tasks %}
     {% csrf_token %}
     <form method="get">
