@@ -9,10 +9,21 @@
     <div class="container">
     <div class="form-check mb-0">
     {% if tasks %}
-    {% for date in dates %}
+    {% csrf_token %}
+    <form method="get">
+        <div class="col-md-6">
+            <div class="form-group">
+                <select id="date-subject" name="date" class="form-control-sm custom-select">
+                    <option {% if selected_date is None %} selected {% endif %} disabled>Выберите дату</option>
+                    {% for date in dates %}
+                        <option value="{{date|date:"Y-m-d"}}" {% if selected_date == date %}selected{% endif %}>{{date}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </form>
         <table class="table table-bordered" id="table" style="text-align: center">
         <br>
-        <h4 style="text-align: center">— {{ date }} —</h4>
         <thead class="table-primary">
             <tr>
                 <th scope="col" class="align-middle">Название</th>
@@ -25,7 +36,7 @@
             </tr>
         </thead>
         {% for el in tasks %}
-            {% if el.is_past_due and el.date == date %}
+            {% if el.is_past_due %}
             <tr {% if el.is_completed %}
                     class="table-success"
             {% elif not el.is_today %}
@@ -63,7 +74,6 @@
             </tr>
             {% endif %}
         {% endfor %}
-        {% endfor %}
         </table>
     {% else %}
         <p>У вас нет запланированных задач!</p>
@@ -74,4 +84,12 @@
     </div>
     </div>
 {% endblock %}
-<script></script>
+{% block javascript %}
+<script>
+$(document).ready(function() {
+    $("#date-subject").change(function () {
+        $(this).parents('form').submit();
+    });
+});
+</script>
+{% endblock javascript %}
