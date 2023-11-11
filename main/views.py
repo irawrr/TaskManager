@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from .models import Record, User
 from .forms import RecordForm, ResultForm
 from datetime import *
+from django.contrib import messages
 
 
 @login_required
@@ -15,6 +16,9 @@ def change(request):
             user = request.user
             user.set_password(password)
             user.save()
+            messages.success(request, 'Пароль успешно изменен')
+        else:
+            messages.error(request, "Пароли не совпадают")
     tasks = Record.objects.order_by('-id')
     return render(request, 'main/change.html', {'title': 'Сменить пароль', 'tasks': tasks})
 
