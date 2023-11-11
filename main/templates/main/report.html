@@ -19,18 +19,18 @@
             </li>
         </ul>
     </nav>
-    <table class="table table-striped-columns">
+    <table id="report" class="table table-striped-columns border border-start-0 border-end-0 border-black">
         <tr>
             <th></th>
             {% for user in users %}
-                <th class="text-center">{{ user.first_name }} {{ user.last_name }}</th>
+                <th class="text-center border-start border-black">{{ user.first_name }} {{ user.last_name }}</th>
             {% endfor %}
         </tr>
         {% for day in days %}
             <tr>
                 <th>{{ data|lookup:day|lookup:'date'|date:"d.m" }}</th>
                 {% for user in users %}
-                    <td>
+                    <td class="border-start border-black">
                         {% for task in data|lookup:day|lookup:'tasks' %}
                             {% if task.user == user %}
                                 {{ task.name }} [{{ task.actual_time }} / {{ task.planned_time }}]<br>
