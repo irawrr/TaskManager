@@ -104,7 +104,7 @@ def users(request):
 
 @login_required
 def index(request):
-    tasks = Record.objects.order_by('date').filter(user=request.user)
+    tasks = Record.objects.order_by('date').filter(user=request.user, date__gte=date.today())
     dates = Record.objects.values_list('date', flat=True).distinct().order_by('date').filter(date__gte=date.today())
     try:
         date_string = request.GET.get('date')

@@ -26,6 +26,7 @@
         <br>
         <thead class="table-primary">
             <tr>
+                <th scope="col" class="align-middle">№</th>
                 <th scope="col" class="align-middle">Название</th>
                 <th scope="col" class="align-middle">Описание</th>
                 <th scope="col" class="align-middle">Плановое время <br>выполнения</th>
@@ -44,6 +45,7 @@
             {% else %}
                     class="table-danger"
             {% endif %}>
+                <td> {{ forloop.counter }}</td>
                 <td>{{ el.name }}</td>
                 <td>{{ el.description }}</td>
                 <td>{{ el.planned_time }}</td>
