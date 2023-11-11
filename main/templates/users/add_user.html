@@ -1,0 +1,26 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    Добавить пользователя
+{% endblock %}
+
+{% block content %}
+    <h2 style="text-align: center">{{ title }}</h2><br>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.first_name }}<br>
+        {{ form.last_name }}<br>
+        {{ form.email }}<br>
+        {{ form.username }}<br>
+        {{ form.password }}<br>
+        <div class="form-check ">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+          <label class="form-check-label" for="flexCheckDefault">
+            Администратор
+          </label>
+        </div><br>
+        <button type="submit" class="btn btn-success">{{ button_name }}</button>
+        <a href="{% url 'home' %}" class="btn btn-danger">Отмена</a>
+        <span style="color: black; margin-left: 30px"> {{ error }}</span>
+    </form>
+{% endblock %}

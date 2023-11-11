@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import Record, User
-from .forms import RecordForm, ResultForm
+from .forms import RecordForm, ResultForm, UserForm
 from datetime import *
+from django.contrib import messages
 
 
 @login_required
@@ -15,6 +16,9 @@ def change(request):
             user = request.user
             user.set_password(password)
             user.save()
+            messages.success(request, 'Пароль успешно изменен')
+        else:
+            messages.error(request, "Пароли не совпадают")
     tasks = Record.objects.order_by('-id')
     return render(request, 'main/change.html', {'title': 'Сменить пароль', 'tasks': tasks})
 
@@ -74,7 +78,7 @@ def report(request):
             },
             'sunday': {
                 'date': week_end,
-                'tasks': list(tasks.filter(date__week_day=7).all()),
+                'tasks': list(tasks.filter(date__iso_week_day=7).all()),
             },
         },
         'week': {
@@ -98,15 +102,68 @@ def report(request):
 
 @login_required
 def users(request):
-    tasks = Record.objects.order_by('-id')
-    return render(request, 'main/users.html', {'title': 'Пользователи', 'tasks': tasks})
+    users_ = User.objects.order_by('id')
+    return render(request, 'users/users.html', {'title': 'Пользователи', 'users': users_})
 
 
 @login_required
+def add_user(request):
+    error = ''
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        record = form.save(commit=False)
+        record.user = request.user
+        record.save()
+        form.save()
+        return redirect('users')
+    form = UserForm()
+    context = {
+        'form': form,
+        'error': error,
+        'title': "Создание пользователя",
+        'button_name': "Создать"
+    }
+    return render(request, 'users/add_user.html', context)
+
+
+@login_required
+def assign_task(request, pk):
+    error = ''
+    if request.method == 'POST':
+        form = RecordForm(request.POST)
+        if form.is_valid() and form.cleaned_data['date'] >= datetime.now().date():
+            record = form.save(commit=False)
+            record.user = User.objects.get(pk=pk)
+            record.save()
+            form.save()
+            return redirect('users')
+        else:
+            error = 'Введите корректные данные!'
+    form = RecordForm()
+    context = {
+        'form': form,
+        'error': error,
+        'title': "Назначение задачи",
+        'button_name': "Назначить",
+    }
+    return render(request, 'users/assign_task.html', context)
+
+@login_required
 def index(request):
-    tasks = Record.objects.order_by('date').filter(user=request.user)
+    tasks = Record.objects.order_by('date').filter(user=request.user, date__gte=date.today())
     dates = Record.objects.values_list('date', flat=True).distinct().order_by('date').filter(date__gte=date.today())
-    return render(request, 'main/index.html', {'title': 'Текущие задачи', 'tasks': tasks, 'dates': dates})
+    try:
+        date_string = request.GET.get('date')
+        selected_date = datetime.strptime(date_string, '%Y-%m-%d').date()
+        tasks = tasks.filter(date=selected_date)
+    except:
+        selected_date = None
+    return render(request, 'main/index.html', {
+        'title': 'Текущие задачи',
+        'tasks': tasks,
+        'dates': dates,
+        'selected_date': selected_date,
+    })
 
 @login_required
 def create(request):

@@ -12,7 +12,7 @@
         {{ form.reason }}<br>
         {{ form.progress }}<br>
         <button type="submit" class="btn btn-success">{{ button_name }}</button>
-        <a href="{% url 'home' %}" class="btn btn-danger">Отмена</a>
+        <button onclick="window.location.href='{% url 'home' %}'" class="btn btn-danger">Отмена</button>
         <span style="color: black; margin-left: 30px"> {{ error }}</span>
     </form>
 {% endblock %}

@@ -17,6 +17,13 @@
               <div class="form-outline mb-4">
                   <input type="password" name="password2" id="id_password" class="form-control" placeholder="Подтвердить новый пароль">
               <div class="form-notch"><div class="form-notch-leading" style="width: 9px;"></div><div class="form-notch-middle" style="width: 64.8px;"></div><div class="form-notch-trailing"></div></div></div>
+                {% if messages %}
+                <div class="messages" style="text-align: center">
+                    {% for message in messages %}
+                    <div  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </div>
+                    {% endfor %}
+                </div><br>
+                {% endif %}
                 <div class="CenteredButton" style="text-align: center">
               <button type="submit" class="btn btn-success btn-block mb-3">Сохранить</button>
                 </div>
