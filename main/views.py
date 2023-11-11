@@ -102,6 +102,12 @@ def report(request):
 
 @login_required
 def users(request):
+    username = request.GET.get('delete')
+    if username and request.user.has_perm('delete_user'):
+        try:
+            User.objects.get(username=username).delete()
+        except:
+            pass
     users_ = User.objects.order_by('id')
     return render(request, 'users/users.html', {'title': 'Пользователи', 'users': users_})
 
@@ -111,11 +117,14 @@ def add_user(request):
     error = ''
     if request.method == 'POST':
         form = UserForm(request.POST)
-        record = form.save(commit=False)
-        record.user = request.user
-        record.save()
-        form.save()
-        return redirect('users')
+        if form.is_valid():
+            record = form.save(commit=False)
+            record.user = request.user
+            record.save()
+            form.save()
+            return redirect('users')
+        else:
+            error = form.errors
     form = UserForm()
     context = {
         'form': form,
