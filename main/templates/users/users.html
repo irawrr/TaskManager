@@ -8,20 +8,22 @@
     <h2 style="text-align: center">Пользователи</h2> <br>
     <div class="container">
     {% csrf_token %}
-        <table class="table table-bordered " id="table" style="text-align: center">
+        <table class="table table-bordered" id="table" style="text-align: center">
         {% for user in users %}
-            <tr class="table table-striped-columns ">
-                <td colspan="2" class="text-center text-bg-light">{{ forloop.counter }}</td>
+            <tr class="table table-striped-columns border-black">
+                <td colspan="2" class="text-center text-bg-light border-start-0">{{ forloop.counter }}</td>
                 <td colspan="2" class="text-center username">{{ user.username }}</td>
-                <td colspan="2"  class="text-end text-bg-light ">
-                    <a onclick="window.location.href='{% url 'assign_task' pk=user.id %}'" class="btn light btn-outline-secondary ">Назначить задачу</a>
-                    <a class="btn btn-danger delete-user">Удалить пользователя</a>
+                <td colspan="2"  class="text-end text-bg-light border-end-0">
+                    {% if not user.is_superuser %}
+                    <a onclick="window.location.href='{% url 'assign_task' pk=user.id %}'" class="btn btn-outline-dark">Назначить задачу</a>
+                    {% endif %}
+                    <a class="btn btn-danger delete-user">Удалить</a>
                 </td>
             </tr>
         {% endfor %}
         </table>
      <div class="col text-center">
-        <button class="btn btn-outline-dark" style="text-align: center" onclick="window.location.href='{% url 'add_user' %}'">Добавить нового пользователя</button>
+        <button class="btn btn-outline-dark" style="text-align: center" onclick="window.location.href='{% url 'add_user' %}'">Добавить</button>
      </div><br><br>
     </div>
     </div>

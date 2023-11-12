@@ -150,6 +150,7 @@ def assign_task(request, pk):
         if form.is_valid() and form.cleaned_data['date'] >= datetime.now().date():
             record = form.save(commit=False)
             record.user = User.objects.get(pk=pk)
+            record.on_delete = False
             record.save()
             form.save()
             return redirect('users')
@@ -168,7 +169,7 @@ def assign_task(request, pk):
 @login_required
 def index(request):
     tasks = Record.objects.order_by('date').filter(user=request.user, date__gte=date.today())
-    dates = Record.objects.values_list('date', flat=True).distinct().order_by('date').filter(date__gte=date.today())
+    dates = Record.objects.values_list('date', flat=True).distinct().order_by('date').filter(date__gte=date.today(), user=request.user)
     try:
         date_string = request.GET.get('date')
         selected_date = datetime.strptime(date_string, '%Y-%m-%d').date()
