@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect
 from .models import Record, User
 from .forms import RecordForm, ResultForm, UserForm
@@ -100,6 +100,11 @@ def report(request):
     })
 
 
+def check_admin(user):
+    return user.is_superuser
+
+
+@user_passes_test(check_admin)
 @login_required
 def users(request):
     username = request.GET.get('delete')
@@ -112,6 +117,7 @@ def users(request):
     return render(request, 'users/users.html', {'title': 'Пользователи', 'users': users_})
 
 
+@user_passes_test(check_admin)
 @login_required
 def add_user(request):
     error = ''
@@ -135,6 +141,7 @@ def add_user(request):
     return render(request, 'users/add_user.html', context)
 
 
+@user_passes_test(check_admin)
 @login_required
 def assign_task(request, pk):
     error = ''
@@ -157,6 +164,7 @@ def assign_task(request, pk):
     }
     return render(request, 'users/assign_task.html', context)
 
+
 @login_required
 def index(request):
     tasks = Record.objects.order_by('date').filter(user=request.user, date__gte=date.today())
@@ -171,8 +179,9 @@ def index(request):
         'title': 'Текущие задачи',
         'tasks': tasks,
         'dates': dates,
-        'selected_date': selected_date,
+        'selected_date': selected_date
     })
+
 
 @login_required
 def create(request):
