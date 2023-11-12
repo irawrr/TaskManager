@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <h2 style="text-align: center">Запланированные задачи</h2>
+    <h2 style="text-align: center">Текущие задачи пользователя {{ user.username }}</h2>
     <div class="container">
     {% if tasks %}
     {% csrf_token %}
