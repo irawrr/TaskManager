@@ -27,7 +27,6 @@
 В конечном итоге мы реализовали то, что хотели на данном этапе. В дальнейшем мы планируем доработать этот проект и использовать его в качестве инструмента контроля занятости команды.
 Результат на момент сдачи:
 
-___
 Главная страница:
 
 ![Главная страница](https://github.com/irawrr/TaskManager/blob/master/main/templates/static/photo/solve1.png)
@@ -42,6 +41,6 @@ ___
 
 ![Отчёт](https://github.com/irawrr/TaskManager/blob/master/main/templates/static/photo/solve3.png)
 
-___
+
 
 
