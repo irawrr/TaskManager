@@ -24,7 +24,7 @@
         <tr>
             <th class="text-center" style="width: 4rem">Дата</th>
             {% for user in users %}
-                <th class="text-center border-start border-black">{{ user.first_name }} {{ user.last_name }}</th>
+                <th class="text-center border-start border-black" style="width: 30rem">{{ user.first_name }} {{ user.last_name }}</th>
             {% endfor %}
         </tr>
         {% for day in days %}
