@@ -11,8 +11,8 @@
         {{ form.actual_time }}<br>
         {{ form.reason }}<br>
         {{ form.progress }}<br>
-        <button type="submit" class="btn btn-success">{{ button_name }}</button>
-        <button onclick="window.location.href='{% url 'home' %}'" class="btn btn-danger">Отмена</button>
+        <button type="submit" class="btn btn-primary">{{ button_name }}</button>
+        <button onclick="window.location.href='{% url 'home' %}'" class="btn btn-outline-dark">Отмена</button>
         <span style="color: black; margin-left: 30px"> {{ error }}</span>
     </form>
 {% endblock %}

@@ -34,6 +34,7 @@ class Record(models.Model):
                                    validators=[MinValueValidator(0), MaxValueValidator(1)])
     created_at = models.DateTimeField(auto_now_add=True)
     is_completed = models.BooleanField(default=False)
+    on_delete = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name

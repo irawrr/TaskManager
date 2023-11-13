@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <h2 style="text-align: center">Запланированные задачи</h2>
+    <h2 style="text-align: center">Текущие задачи пользователя {{ user.username }}</h2>
     <div class="container">
     {% if tasks %}
     {% csrf_token %}
@@ -18,6 +18,11 @@
                         <option value="{{date|date:"Y-m-d"}}" {% if selected_date == date %}selected{% endif %}>{{date}}</option>
                     {% endfor %}
                 </select>
+                {% if selected_date %}
+                <a class="ms-1 text-danger" href="./">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
+                </a>
+                {% endif %}
             </div>
         </div>
     </form>
@@ -39,8 +44,10 @@
             {% if el.is_past_due %}
             <tr {% if el.is_completed %}
                     class="table-success"
-            {% elif not el.is_today %}
+            {% elif not el.is_today and el.on_delete %}
                     class="table-warning"
+            {% elif not el.is_today and not el.on_delete %}
+                    class="table-info"
             {% else %}
                     class="table-danger"
             {% endif %}>
@@ -59,7 +66,7 @@
                         </svg>
                     </button><br>
                     <button onclick="window.location.href='{% url 'complete' pk=el.id %}'" class="btn btn-danger">Завершить задачу</button>
-                    {% elif not el.is_today %}
+                    {% elif not el.is_today and el.on_delete and not el.is_completed %}
                    <button onclick="window.location.href='{% url 'edit' pk=el.id %}'" class="btn btn-class-outline-info shadow-none" type="button" style="margin-bottom: 5px; margin-top: -5px">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                           <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
@@ -68,6 +75,8 @@
                      </button>
                     <br>
                         <button onclick="window.location.href='{% url 'delete' pk=el.id %}'" class="btn btn-danger">Удалить задачу</button>
+                    {% elif not el.is_today and not el.on_delete and not el.is_completed %}
+                    Задача назначена<br>администратором
                     {% else %}
                     Завершено
                     {% endif %}

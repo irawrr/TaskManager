@@ -17,8 +17,10 @@
       </div>
       <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
         <li><button onclick="window.location.href='{% url 'home' %}'" class="nav-link px-2 link-dark">Задачи</button></li>
+          {% if user.is_superuser %}
         <li><button onclick="window.location.href='{% url 'users' %}'" class="nav-link px-2 link-dark">Пользователи</button></li>
-        <li><button onclick="window.location.href='{% url 'report' %}'" class="nav-link px-2 link-dark">Отчет</button></li>
+          {% endif %}
+        <li><button onclick="window.location.href='{% url 'report' %}'" class="nav-link px-2 link-dark">Отчёт</button></li>
       </ul>
       <div class="col-md-3 text-end">
           {% if user.is_authenticated %}

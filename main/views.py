@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.shortcuts import render, redirect
 from .models import Record, User
 from .forms import RecordForm, ResultForm, UserForm
@@ -100,6 +100,11 @@ def report(request):
     })
 
 
+def check_admin(user):
+    return user.is_superuser
+
+
+@user_passes_test(check_admin)
 @login_required
 def users(request):
     users_ = User.objects.order_by('id')
@@ -116,6 +121,7 @@ def delete_user(request):
         pass
     return redirect('users')
 
+@user_passes_test(check_admin)
 @login_required
 @permission_required('add_user')
 def add_user(request):
@@ -152,6 +158,7 @@ def add_user(request):
     return render(request, 'users/add_user.html', context)
 
 
+@user_passes_test(check_admin)
 @login_required
 def assign_task(request, pk):
     error = ''
@@ -160,6 +167,7 @@ def assign_task(request, pk):
         if form.is_valid() and form.cleaned_data['date'] >= datetime.now().date():
             record = form.save(commit=False)
             record.user = User.objects.get(pk=pk)
+            record.on_delete = False
             record.save()
             form.save()
             return redirect('users')
@@ -174,10 +182,11 @@ def assign_task(request, pk):
     }
     return render(request, 'users/assign_task.html', context)
 
+
 @login_required
 def index(request):
     tasks = Record.objects.order_by('date').filter(user=request.user, date__gte=date.today())
-    dates = Record.objects.values_list('date', flat=True).distinct().order_by('date').filter(date__gte=date.today())
+    dates = Record.objects.values_list('date', flat=True).distinct().order_by('date').filter(date__gte=date.today(), user=request.user)
     try:
         date_string = request.GET.get('date')
         selected_date = datetime.strptime(date_string, '%Y-%m-%d').date()
@@ -188,8 +197,9 @@ def index(request):
         'title': 'Текущие задачи',
         'tasks': tasks,
         'dates': dates,
-        'selected_date': selected_date,
+        'selected_date': selected_date
     })
+
 
 @login_required
 def create(request):
