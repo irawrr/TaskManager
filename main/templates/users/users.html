@@ -22,9 +22,10 @@
             </tr>
         {% endfor %}
         </table>
-     <div class="col text-center">
-        <button class="btn btn-outline-dark" style="text-align: center" onclick="window.location.href='{% url 'add_user' %}'">Добавить</button>
-     </div><br><br>
+        <div class="col text-center">
+            <button class="btn btn-outline-dark" style="text-align: center" onclick="window.location.href='{% url 'add_user' %}'">Добавить</button>
+        </div>
+        <br><br>
     </div>
     </div>
 {% endblock %}
@@ -32,10 +33,10 @@
 {% block javascript %}
 <script>
     $(document).ready(function () {
-        let url = '{% url 'users' %}';
+        let url = '{% url 'delete_user' %}';
         $(".delete-user").click(function () {
             let username = $(this).parents('tr').find('td.username').text().trim();
-            window.location.href = url + '?delete=' + username;
+            window.location.href = url + '?username=' + username;
         });
     });
 </script>

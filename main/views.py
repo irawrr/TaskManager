@@ -107,14 +107,19 @@ def check_admin(user):
 @user_passes_test(check_admin)
 @login_required
 def users(request):
-    username = request.GET.get('delete')
-    if username and request.user.has_perm('delete_user'):
-        try:
-            User.objects.get(username=username).delete()
-        except:
-            pass
     users_ = User.objects.order_by('id')
     return render(request, 'users/users.html', {'title': 'Пользователи', 'users': users_})
+
+
+@user_passes_test(check_admin)
+@login_required
+def delete_user(request):
+    username = request.GET.get('username')
+    try:
+        User.objects.get(username=username).delete()
+    except:
+        pass
+    return redirect('users')
 
 
 @user_passes_test(check_admin)
@@ -124,10 +129,29 @@ def add_user(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
         if form.is_valid():
-            record = form.save(commit=False)
-            record.user = request.user
-            record.save()
-            form.save()
+            data = form.data
+            username = data.get('username')
+            email = data.get('email')
+            password = data.get('password')
+            first_name = data.get('first_name')
+            last_name = data.get('last_name')
+            is_admin = False if form.data.get('is_admin') is None else True
+            if is_admin:
+                user = User.objects.create_superuser(
+                    username=username,
+                    email=email,
+                    password=password,
+                    first_name=first_name,
+                    last_name=last_name
+                )
+            else:
+                user = User.objects.create_user(
+                    username=username,
+                    email=email,
+                    password=password,
+                    first_name=first_name,
+                    last_name=last_name
+                )
             return redirect('users')
         else:
             error = form.errors
@@ -238,6 +262,7 @@ def edit(request, pk):
         'button_name': "Редактировать"
     }
     return render(request, 'main/create.html', context)
+
 
 @login_required
 def complete(request, pk):
