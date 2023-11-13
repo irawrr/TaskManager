@@ -15,14 +15,17 @@
                 <td colspan="2" class="text-center username">{{ user.username }}</td>
                 <td colspan="2"  class="text-end text-bg-light ">
                     <a onclick="window.location.href='{% url 'assign_task' pk=user.id %}'" class="btn light btn-outline-secondary ">Назначить задачу</a>
-                    <a class="btn btn-danger delete-user">Удалить пользователя</a>
+                    {% if perm.delete_user %}<a class="btn btn-danger delete-user">Удалить пользователя</a>{% endif %}
                 </td>
             </tr>
         {% endfor %}
         </table>
-     <div class="col text-center">
+        {% if perm.add_user %}
+        <div class="col text-center">
         <button class="btn btn-outline-dark" style="text-align: center" onclick="window.location.href='{% url 'add_user' %}'">Добавить нового пользователя</button>
-     </div><br><br>
+        </div>
+        {% endif %}
+        <br><br>
     </div>
     </div>
 {% endblock %}
@@ -30,10 +33,10 @@
 {% block javascript %}
 <script>
     $(document).ready(function () {
-        let url = '{% url 'users' %}';
+        let url = '{% url 'delete_user' %}';
         $(".delete-user").click(function () {
             let username = $(this).parents('tr').find('td.username').text().trim();
-            window.location.href = url + '?delete=' + username;
+            window.location.href = url + '?username=' + username;
         });
     });
 </script>

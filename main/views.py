@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect
 from .models import Record, User
 from .forms import RecordForm, ResultForm, UserForm
@@ -102,26 +102,43 @@ def report(request):
 
 @login_required
 def users(request):
-    username = request.GET.get('delete')
-    if username and request.user.has_perm('delete_user'):
-        try:
-            User.objects.get(username=username).delete()
-        except:
-            pass
     users_ = User.objects.order_by('id')
     return render(request, 'users/users.html', {'title': 'Пользователи', 'users': users_})
 
 
 @login_required
+@permission_required('delete_user')
+def delete_user(request):
+    username = request.GET.get('username')
+    try:
+        User.objects.get(username=username).delete()
+    except:
+        pass
+    return redirect('users')
+
+@login_required
+@permission_required('add_user')
 def add_user(request):
     error = ''
     if request.method == 'POST':
         form = UserForm(request.POST)
         if form.is_valid():
-            record = form.save(commit=False)
-            record.user = request.user
-            record.save()
-            form.save()
+            data = form.data
+            username = data.get('username')
+            email = data.get('email')
+            password = data.get('password')
+            first_name = data.get('first_name')
+            last_name = data.get('last_name')
+            is_admin = False if form.data.get('is_admin') is None else True
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password,
+                first_name=first_name,
+                last_name=last_name
+            )
+            if is_admin:
+                user.user_permissions.add('add_user', 'delete_user')
             return redirect('users')
         else:
             error = form.errors
