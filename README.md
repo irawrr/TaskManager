@@ -7,7 +7,8 @@
 3. Отсутствует разграничение доступа.
 
 Вот как это выглядит в действительности:
-![Excel таблички](https://github.com/irawrr/TaskManager/blob/master/main/templates/static/photo/problem.png)
+
+![Excel-таблички](https://github.com/irawrr/TaskManager/blob/master/main/templates/static/photo/problem.png)
 
 ## Цель:
 Целью данного проекта является создание менеджера задач, с помощью которого можно контролировать занятость команды.
@@ -25,3 +26,10 @@
 ## Итог:
 В конечном итоге мы реализовали то, что хотели на данном этапе. В дальнейшем мы планируем доработать этот проект и использовать его в качестве инструмента контроля занятости команды.
 Результат на момент сдачи:
+
+![Главная страница](https://github.com/irawrr/TaskManager/blob/master/main/templates/static/photo/solve1.png)
+![Пользователи](https://github.com/irawrr/TaskManager/blob/master/main/templates/static/photo/solve2.png)
+![Отчёт](https://github.com/irawrr/TaskManager/blob/master/main/templates/static/photo/solve3.png)
+
+
+
