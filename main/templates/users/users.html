@@ -17,16 +17,14 @@
                     {% if not user.is_superuser %}
                     <a onclick="window.location.href='{% url 'assign_task' pk=user.id %}'" class="btn btn-outline-dark">Назначить задачу</a>
                     {% endif %}
-                    {% if perm.delete_user %}<a class="btn btn-danger delete-user">Удалить</a>{% endif %}
+                    <a class="btn btn-danger delete-user">Удалить</a>
                 </td>
             </tr>
         {% endfor %}
         </table>
-        {% if perm.add_user %}
         <div class="col text-center">
             <button class="btn btn-outline-dark" style="text-align: center" onclick="window.location.href='{% url 'add_user' %}'">Добавить</button>
         </div>
-        {% endif %}
         <br><br>
     </div>
     </div>

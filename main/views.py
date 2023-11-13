@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect
 from .models import Record, User
 from .forms import RecordForm, ResultForm, UserForm
@@ -111,8 +111,8 @@ def users(request):
     return render(request, 'users/users.html', {'title': 'Пользователи', 'users': users_})
 
 
+@user_passes_test(check_admin)
 @login_required
-@permission_required('delete_user')
 def delete_user(request):
     username = request.GET.get('username')
     try:
@@ -121,9 +121,9 @@ def delete_user(request):
         pass
     return redirect('users')
 
+
 @user_passes_test(check_admin)
 @login_required
-@permission_required('add_user')
 def add_user(request):
     error = ''
     if request.method == 'POST':
@@ -136,15 +136,22 @@ def add_user(request):
             first_name = data.get('first_name')
             last_name = data.get('last_name')
             is_admin = False if form.data.get('is_admin') is None else True
-            user = User.objects.create_user(
-                username=username,
-                email=email,
-                password=password,
-                first_name=first_name,
-                last_name=last_name
-            )
             if is_admin:
-                user.user_permissions.add('add_user', 'delete_user')
+                user = User.objects.create_superuser(
+                    username=username,
+                    email=email,
+                    password=password,
+                    first_name=first_name,
+                    last_name=last_name
+                )
+            else:
+                user = User.objects.create_user(
+                    username=username,
+                    email=email,
+                    password=password,
+                    first_name=first_name,
+                    last_name=last_name
+                )
             return redirect('users')
         else:
             error = form.errors
@@ -255,6 +262,7 @@ def edit(request, pk):
         'button_name': "Редактировать"
     }
     return render(request, 'main/create.html', context)
+
 
 @login_required
 def complete(request, pk):
