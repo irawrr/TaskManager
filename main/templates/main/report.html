@@ -6,7 +6,7 @@
     <h2 style="text-align: center">Отчёт</h2>
         <ul class="pagination">
             <li class="page-item">
-                <a class="page-link" href="{{ week.urls.prev }}" aria-label="Предыдущая неделя">
+                <a class="page-link" onclick="window.location.href = '{{ week.urls.prev }}'" aria-label="Предыдущая неделя" role="button">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
@@ -14,7 +14,7 @@
                 <a class="page-link disabled bg-primary text-white" href="#">{{ week.start|date:"d.m.Y" }} - {{ week.end|date:"d.m.Y" }}</a>
             </li>
             <li class="page-item">
-                <a class="page-link" href="{{ week.urls.next }}" aria-label="Следующая неделя">
+                <a class="page-link" onclick="window.location.href = '{{ week.urls.next }}'" aria-label="Следующая неделя" role="button">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
